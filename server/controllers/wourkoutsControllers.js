@@ -5,7 +5,7 @@ const getAll = async (req, res) => {
   try {
     // sort by created at with decending order meaning newest one at the top
     const resutls = await Workout.find({}).sort({ createdAt: -1 });
-    res.json({ mssg: "workout router get requested", resutls });
+    res.json({ request: "Fetch request to All Workouts in DB", resutls });
   } catch (error) {
     res.json({ error: error.message });
   }
@@ -14,11 +14,15 @@ const getAll = async (req, res) => {
 // get single workout
 const getSingleById = async (req, res) => {
   try {
-    const results = await Workout.findById(req.params.id);
+    const { id } = req.params;
+    const workout = await Workout.findById(id);
+    if (!mongoose.Types.ObjectId.isValid(id) || !workout) {
+      return res.status(404).json({ error: `No workout Found. Invalid Id ` });
+    }
     res.json({
-      mssg: "requested single workout /:id",
+      request: "Request a single workout from DB with /:id param",
       query: req.params,
-      results,
+      results: workout,
     });
   } catch (error) {
     res.status(404).json({ error: error.message });
@@ -34,7 +38,7 @@ const createNewWorkout = async (req, res) => {
       load,
       reps,
     });
-    res.status(200).json(workout);
+    res.status(200).json({ request: "Post request to a new workout", workout });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -51,7 +55,8 @@ const deleteSingleWorkoutById = async (req, res) => {
       return res.status(404).json({ error: `No workout Found. Invalid Id ` });
     }
     res.status(200).json({
-      mssg: "delete requested workouts!!",
+      request: "delete request!!",
+      query: req.params,
       results: workout,
     });
   } catch (error) {
@@ -64,17 +69,16 @@ const deleteSingleWorkoutById = async (req, res) => {
 const updateWorkoutById = async (req, res) => {
   try {
     const { id } = req.params;
-
-    // if (!mongoose.Types.ObjectId.isValid(id)) {
-    //   return res.status(404).json({ error: `No workout Found. Invalid Id ` });
-    // }
     const workout = await Workout.findByIdAndUpdate({ _id: id }, req.body);
     if (!mongoose.Types.ObjectId.isValid(id) || !workout) {
       return res.status(404).json({ error: `No workout Found. Invalid Id ` });
     }
-    res
-      .status(200)
-      .json({ mssg: "update requested on workouts", results: workout });
+    res.status(200).json({
+      request:
+        "update request to a single workout with /:id param and a new body values",
+      query: { params: req.params, body: req.body },
+      results: workout,
+    });
   } catch (error) {
     res.status(404).json({ error: error.message });
   }
