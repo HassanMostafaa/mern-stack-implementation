@@ -3,7 +3,6 @@ require("dotenv").config();
 const workoutRoutes = require("./routes/workouts");
 const mongoose = require("mongoose");
 
-
 //express app
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,8 +18,14 @@ app.use(express.json());
 app.use("/api/workouts", workoutRoutes);
 
 // connect to db and starting the server
+const dbConnectionOptions = {
+  dbName: `mainDatabase`,
+  // useNewParser: true,
+  // useUnifiedTopology: true,
+};
+// more about options https://mongoosejs.com/docs/connections.html
 mongoose
-  .connect(process.env.MONGO_CONNECTION_STRING)
+  .connect(process.env.MONGO_CONNECTION_STRING, dbConnectionOptions)
   .then(() => {
     app.listen(port, () => {
       console.log(
@@ -33,3 +38,4 @@ mongoose
 // FOR HASHING PASSWORDS IN THE FUTURE
 // const bcrypt = require("bcrypt");
 //const saltRounds = 10;
+//{ dbName: `mainDB` }
