@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useWorkoutContext } from "./../hooks/useWorkoutContext";
 
 export const WorkoutForm = ({ fetchWorkouts }) => {
+  const { dispatch } = useWorkoutContext();
   const [title, setTitle] = useState("");
   const [load, setLoad] = useState("");
   const [reps, setReps] = useState("");
@@ -18,7 +20,7 @@ export const WorkoutForm = ({ fetchWorkouts }) => {
       },
     });
     const json = await res.json();
-    console.log(res);
+    console.log("Response.Ok: ", res.ok, "Status:", res.status);
     if (!res.ok) {
       setError({ err: json.error });
     }
@@ -28,7 +30,8 @@ export const WorkoutForm = ({ fetchWorkouts }) => {
       setLoad("");
       setReps("");
       console.log("new workout added:", json);
-      fetchWorkouts();
+      // fetchWorkouts()
+      dispatch({ type: "CREATE_WORKOUT", payload: json.workout });
     }
   };
 

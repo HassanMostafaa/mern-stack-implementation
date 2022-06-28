@@ -3,9 +3,7 @@ import { motion } from "framer-motion";
 
 const WorkoutDetails = ({ workout, fetchWorkouts, ix }) => {
   const handleDelete = async (id) => {
-    const res = await axios.delete(`/api/workouts/${id}`);
-    const data = await res.data;
-    console.log(data, res);
+    await axios.delete(`/api/workouts/${id}`);
     fetchWorkouts();
   };
 
