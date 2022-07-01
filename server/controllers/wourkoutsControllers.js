@@ -32,6 +32,17 @@ const getSingleById = async (req, res) => {
 // create new
 const createNewWorkout = async (req, res) => {
   const { title, load, reps } = req.body;
+
+  let emptyFields = [];
+  !title && emptyFields.push("title");
+  !load && emptyFields.push("load");
+  !reps && emptyFields.push("reps");
+  if (emptyFields.length > 0) {
+    return res
+      .status(400)
+      .json({ error: " Please, Fill in all the forms ", emptyFields });
+  }
+
   try {
     const workout = await Workout.create({
       title,

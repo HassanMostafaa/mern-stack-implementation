@@ -7,11 +7,13 @@ export const WorkoutForm = ({ fetchWorkouts }) => {
   const [load, setLoad] = useState("");
   const [reps, setReps] = useState("");
   const [error, setError] = useState(null);
+  const [emptyFields, setEmptyFields] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const workout = { title, load, reps };
+
     const res = await fetch("/api/workouts", {
       method: "POST",
       body: JSON.stringify(workout),
@@ -20,15 +22,17 @@ export const WorkoutForm = ({ fetchWorkouts }) => {
       },
     });
     const json = await res.json();
-    console.log("Response.Ok: ", res.ok, "Status:", res.status);
+
     if (!res.ok) {
-      setError({ err: json.error });
+      setEmptyFields(json.emptyFields);
+      setError(json.error);
     }
     if (res.ok) {
       setError(null);
       setTitle("");
       setLoad("");
       setReps("");
+      setEmptyFields([]);
       console.log("new workout added:", json);
       // fetchWorkouts()
       dispatch({ type: "CREATE_WORKOUT", payload: json.workout });
@@ -44,6 +48,7 @@ export const WorkoutForm = ({ fetchWorkouts }) => {
         name=""
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        className={emptyFields.includes("title") ? "error" : ""}
       />
       <label htmlFor="">Load in (KG): </label>
       <input
@@ -51,6 +56,7 @@ export const WorkoutForm = ({ fetchWorkouts }) => {
         name=""
         value={load}
         onChange={(e) => setLoad(e.target.value)}
+        className={emptyFields.includes("load") ? "error" : ""}
       />
       <label htmlFor="">Reps: </label>
       <input
@@ -58,9 +64,10 @@ export const WorkoutForm = ({ fetchWorkouts }) => {
         name=""
         value={reps}
         onChange={(e) => setReps(e.target.value)}
+        className={emptyFields.includes("reps") ? "error" : ""}
       />
       <button>Add Workout</button>
-      {error && <div>{error.err}</div>}
+      {error && <div className="error">{error}</div>}
     </form>
   );
 };

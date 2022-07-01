@@ -18,7 +18,7 @@ header .container {
   margin: 0 auto;
   padding: 10px 20px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
 }
 header a {
@@ -33,22 +33,27 @@ header a {
 
 /* homepage */
 .home {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  gap: 50px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 .workouts {
-  /* outline: 1px solid red; */
+  flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: stretch;
+  /* max-width: 70%; */
+  gap: 20px;
   flex-wrap: wrap;
 }
 .workout-details {
-  min-width: 450px;
+  min-width: 350px;
+  overflow: hidden;
+  /* flex: 1; */
+  /* transition: 0.5s width ease-in-out; */
   background: #fff;
   border-radius: 4px;
-  margin: 20px auto;
+  /* margin: 20px 20px 0 0; */
   padding: 20px;
   position: relative;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
@@ -64,15 +69,13 @@ header a {
   color: #555;
 }
 .workout-details span {
-  position: absolute;
-  top: 20px;
-  right: 20px;
   cursor: pointer;
   background: #f8dddd;
-  padding: 6px 10px;
+  padding: 10px 10px 5px 10px;
   border-radius: 10%;
   color: rgb(75, 5, 5);
   transition: 0.2s ease-in-out;
+  float: right;
 }
 .workout-details span:hover {
   background: rgb(170, 3, 3);
@@ -81,6 +84,9 @@ header a {
 }
 
 /* new workout form */
+.create {
+  width: 25%;
+}
 label,
 input {
   display: block;
@@ -112,5 +118,5 @@ div.error {
   margin: 20px 0;
 }
 input.error {
-  border: 1px solid var(--error);
+  outline: 1px solid var(--error);
 }

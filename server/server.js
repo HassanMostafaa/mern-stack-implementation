@@ -27,11 +27,7 @@ const dbConnectionOptions = {
 mongoose
   .connect(process.env.MONGO_CONNECTION_STRING, dbConnectionOptions)
   .then(() => {
-    app.listen(port, () => {
-      console.log(
-        `Connected to DB and running on \nhttp://localhost:${port}\nMain Route\nhttp://localhost:${port}/api/workouts`
-      );
-    });
+    app.listen(port);
   })
   .catch((error) => console.log(error));
 
